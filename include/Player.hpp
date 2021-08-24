@@ -4,13 +4,15 @@
 #include <vector>
 
 #include "Bullet.hpp"
+#include "ParticleManager.hpp"
+#include "Particle.hpp"
 
 class Player{
 public:
     Player(float x, float y, Texture2D* tex);
     void Draw();
     void Rotate(char dir, float& dt);
-    void AddThrust(float& dt);
+    void AddThrust(float& dt, ParticleManager& p, Texture2D* tex);
     void Update(float& dt);
     void Shoot(std::vector<Bullet>& bullets, Texture2D* tex);
     void SetMoving(bool move);

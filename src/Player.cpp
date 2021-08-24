@@ -5,6 +5,8 @@
 #include "Player.hpp"
 #include "Globals.hpp"
 #include "Bullet.hpp"
+#include "ParticleManager.hpp"
+#include "Particle.hpp"
 
 Player::Player(float x, float y, Texture2D* tex){
     rect.x = x;
@@ -23,9 +25,23 @@ void Player::Rotate(char dir, float& dt){
     rotation += dir * dt * 170.0f;
 }
 
-void Player::AddThrust(float& dt){
+void Player::AddThrust(float& dt, ParticleManager& p, Texture2D* tex){
     xVel += sinf(rotation * DEG2RAD) * speed * dt;
     yVel += -cosf(rotation * DEG2RAD) * speed * dt;
+
+    // randomly add particles to the back of the ship
+    float xMin = (rect.x) - sinf(rotation * DEG2RAD) * 16;
+    float yMin = (rect.y) + cosf(rotation * DEG2RAD) * 16;
+
+    float x = GetRandomValue(xMin - 10, xMin + 10);
+    float y = GetRandomValue(yMin - 10, yMin + 10);
+
+    if (CheckCollisionPointRec(Vector2{x, y}, rect)){
+        x = xMin;
+        y = yMin;
+    }
+
+    p.AddParticles(Particle(x, y, 4, 4, tex, 0.05));
 }
 
 void Player::Shoot(std::vector<Bullet>& bullets, Texture2D* tex){
@@ -68,7 +84,7 @@ void Player::Update(float& dt){
     else if (rect.y < -32)
         rect.y = glob::SCREEN_HEIGHT;
 
-    std::cout << xVel << std::endl;
+    //std::cout << rect.x << std::endl;
 }
 
 //getters and setters
