@@ -7,6 +7,7 @@
 #include "Bullet.hpp"
 #include "ParticleManager.hpp"
 #include "Particle.hpp"
+#include "SinParticle.hpp"
 
 Player::Player(float x, float y, Texture2D* tex){
     rect.x = x;
@@ -18,7 +19,8 @@ Player::Player(float x, float y, Texture2D* tex){
 
 void Player::Draw(){
     //DrawTextureEx(*texture, Vector2 { rect.x, rect.y }, 0.0f, 1.0f, RAYWHITE);
-    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, rect, Vector2{16.0f, 16.0f}, rotation, RAYWHITE);
+    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, Rectangle{rect.x + 16, rect.y + 16, rect.width, rect.height}, Vector2{16.0f, 16.0f}, rotation, RAYWHITE);
+    //DrawRectangle(rect.x, rect.y, rect.width, rect.height, RED);
 }
 
 void Player::Rotate(char dir, float& dt){
@@ -30,18 +32,18 @@ void Player::AddThrust(float& dt, ParticleManager& p, Texture2D* tex){
     yVel += -cosf(rotation * DEG2RAD) * speed * dt;
 
     // randomly add particles to the back of the ship
-    float xMin = (rect.x) - sinf(rotation * DEG2RAD) * 16;
-    float yMin = (rect.y) + cosf(rotation * DEG2RAD) * 16;
+    float x = (rect.x + 16) - sinf(rotation * DEG2RAD) * 16;
+    float y = (rect.y + 16) + cosf(rotation * DEG2RAD) * 16;
 
-    float x = GetRandomValue(xMin - 10, xMin + 10);
-    float y = GetRandomValue(yMin - 10, yMin + 10);
+    //float x = GetRandomValue(xMin - 10, xMin + 10);
+    //float y = GetRandomValue(yMin - 10, yMin + 10);
 
-    if (CheckCollisionPointRec(Vector2{x, y}, rect)){
-        x = xMin;
-        y = yMin;
-    }
+    //if (CheckCollisionPointRec(Vector2{x, y}, rect)){
+        //x = xMin;
+        //y = yMin;
+    //}
 
-    p.AddParticles(Particle(x, y, 4, 4, tex, 0.05));
+    p.AddParticles(new SinParticle(x, y, 4, 4, tex, 1.0f, rotation, this));
 }
 
 void Player::Shoot(std::vector<Bullet>& bullets, Texture2D* tex){
@@ -89,3 +91,4 @@ void Player::Update(float& dt){
 
 //getters and setters
 void Player::SetMoving(bool move) { moving = move; }
+Vector2 Player::GetVel() { return Vector2{xVel, yVel}; };

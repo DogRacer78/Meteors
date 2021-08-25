@@ -16,6 +16,7 @@ public:
     void Update(float& dt);
     void Shoot(std::vector<Bullet>& bullets, Texture2D* tex);
     void SetMoving(bool move);
+    Vector2 GetVel();
 private:
     Rectangle rect;
     Texture2D* texture;

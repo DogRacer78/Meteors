@@ -16,9 +16,10 @@ void Particle::Draw(){
 }
 
 void Particle::Update(float& dt){
-    rect.x += xVel * dt;
-    rect.y += xVel * dt;
+    UpdateLifeTimer(dt);
+}
 
+void Particle::UpdateLifeTimer(float& dt){
     lifetimeTimer += dt;
 
     if (lifetimeTimer > lifetime)

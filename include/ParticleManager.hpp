@@ -4,13 +4,14 @@
 #include <vector>
 
 #include "Particle.hpp"
+#include "SinParticle.hpp"
 
 class ParticleManager{
 public:
-    void AddParticles(const Particle& p);
+    void AddParticles(Particle* p);
     void RemoveParticle();
     void Draw();
     void Update(float& dt);
 private:
-    std::vector<Particle> particles;
+    std::vector<Particle*> particles;
 };

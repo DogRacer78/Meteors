@@ -7,6 +7,7 @@
 #include "Globals.hpp"
 #include "Particle.hpp"
 #include "ParticleManager.hpp"
+#include "SinParticle.hpp"
 
 int main(void)
 {
@@ -51,9 +52,9 @@ int main(void)
         // particle demonstration
         // if (IsMouseButtonDown(0)){
         //     Vector2 pos = GetMousePosition();
-        //     pos.x += GetRandomValue(-20, 20);
-        //     pos.y += GetRandomValue(-20, 20);
-        //     pManager.AddParticles(Particle(pos.x, pos.y, 4.0f, 4.0f, &engineParticle));
+        //     //pos.x += GetRandomValue(-20, 20);
+        //     //pos.y += GetRandomValue(-20, 20);
+        //     pManager.AddParticles(new SinParticle(pos.x, pos.y, 4.0f, 4.0f, &engineParticle, 10.0f, 45));
         // }
 
         // update
