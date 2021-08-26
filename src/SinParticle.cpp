@@ -20,7 +20,7 @@ void SinParticle::Update(float& dt){
         step += 10;
     }
 
-    xVel = 100.0f * dt;
+    xVel = 0;
     yVel = sinf(step * DEG2RAD) * dt * 500.0f;
 
     float x = xVel * cosf(DEG2RAD * dir) - yVel * sinf(DEG2RAD * dir);

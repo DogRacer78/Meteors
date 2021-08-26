@@ -11,7 +11,7 @@ class ParticleManager;
 
 class Player{
 public:
-    Player(float x, float y, Texture2D* tex);
+    Player(float x, float y, Texture2D* tex, Texture2D* _burnerTex);
     void Draw();
     void Rotate(char dir, float& dt);
     void AddThrust(float& dt, ParticleManager& p, Texture2D* tex);
@@ -22,9 +22,13 @@ public:
 private:
     Rectangle rect;
     Texture2D* texture;
+    Texture2D* burnerTex;
     float xVel = 0.0f, yVel = 0.0f;
     float rotation;
     float drag = 150.0f;
     float speed = 300.0f;
     bool moving = false;
+    Vector2 thrustLocation = {0.0f, 0.0f};
+    float engineParticleTimer = 0.0f;
+    float engineParticleTime = 0.01f;
 };

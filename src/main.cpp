@@ -19,8 +19,9 @@ int main(void)
     Texture2D playerTex = LoadTexture("../res/PlayerTex.png");
     Texture2D laserTex = LoadTexture("../res/Laser.png");
     Texture2D engineParticle = LoadTexture("../res/Particle.png");
+    Texture2D burnerTex = LoadTexture("../res/Burner.png");
 
-    Player player = Player(100.0f, 100.0f, &playerTex);
+    Player player = Player(100.0f, 100.0f, &playerTex, &burnerTex);
 
     ParticleManager pManager = ParticleManager();
 
