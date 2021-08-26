@@ -7,6 +7,8 @@
 #include "ParticleManager.hpp"
 #include "Particle.hpp"
 
+class ParticleManager;
+
 class Player{
 public:
     Player(float x, float y, Texture2D* tex);

@@ -43,7 +43,7 @@ void Player::AddThrust(float& dt, ParticleManager& p, Texture2D* tex){
         //y = yMin;
     //}
 
-    p.AddParticles(new SinParticle(x, y, 4, 4, tex, 1.0f, rotation, this));
+    p.AddParticles(new SinParticle(x, y, 4, 4, tex, 0.5f, rotation));
 }
 
 void Player::Shoot(std::vector<Bullet>& bullets, Texture2D* tex){

@@ -21,8 +21,15 @@ void Bullet::Draw(){
 }
 
 void Bullet::Update(float& dt){
+    
+    travelTimer += dt;
+
+    if (travelTimer > travelTime)
+        dead = true;
+
     rect.x += xVel * dt;
     rect.y += yVel * dt;
+
 
     if (rect.x > glob::SCREEN_WIDTH)
         rect.x = -rect.width;
@@ -34,3 +41,6 @@ void Bullet::Update(float& dt){
     else if (rect.y < -rect.height)
         rect.y = glob::SCREEN_HEIGHT;
 }
+
+//getters and setters
+bool Bullet::GetDead(){ return dead; }

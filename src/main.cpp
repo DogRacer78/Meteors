@@ -61,8 +61,15 @@ int main(void)
 
         player.Update(dt);
 
-        for (uint32_t i = 0; i < bullets.size(); i++)
-            bullets[i].Update(dt);
+        for (uint32_t i = 0; i < bullets.size(); i++){
+            if (!bullets[i].GetDead()){
+                bullets[i].Update(dt);
+            }
+            else{
+                bullets.erase(bullets.begin() + i);
+                i--;
+            }
+        }
 
         pManager.Update(dt);
 
