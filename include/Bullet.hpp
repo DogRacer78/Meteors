@@ -8,11 +8,12 @@ public:
     void Draw();
     void Update(float& dt);
     bool GetDead();
-private:
+    void SetDead(bool d);
     Rectangle rect;
+private:
     Texture2D* texture;
     float xVel = 0.0f, yVel = 0.0f;
-    float travelTime = 10.0f;
+    float travelTime = 2.0f;
     float travelTimer = 0.0f;
     float rotation;
     bool dead = false;

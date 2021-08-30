@@ -25,3 +25,7 @@ void ParticleManager::Update(float& dt){
         }
     }
 }
+
+void ParticleManager::Reset(){ 
+    particles.clear();
+}

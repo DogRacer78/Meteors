@@ -7,8 +7,8 @@
 Bullet::Bullet(float x, float y, Texture2D* tex, float rots){
     rect.x = x;
     rect.y = y;
-    rect.width = 16;
-    rect.height = 16;
+    rect.width = 8;
+    rect.height = 8;
     texture = tex;
     rotation = rots;
 
@@ -44,3 +44,4 @@ void Bullet::Update(float& dt){
 
 //getters and setters
 bool Bullet::GetDead(){ return dead; }
+void Bullet::SetDead(bool d) { dead = d; }

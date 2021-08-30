@@ -28,7 +28,7 @@ void Player::Draw(){
 }
 
 void Player::Rotate(char dir, float& dt){
-    rotation += dir * dt * 170.0f;
+    rotation += dir * dt * rotationSpeed;
 }
 
 void Player::AddThrust(float& dt, ParticleManager& p, Texture2D* tex){
@@ -43,9 +43,13 @@ void Player::AddThrust(float& dt, ParticleManager& p, Texture2D* tex){
     if (engineParticleTimer > engineParticleTime){
         float xMin = (rect.x + 16) - sinf(rotation * DEG2RAD) * 16;
         float yMin = (rect.y + 16) + cosf(rotation * DEG2RAD) * 16;
-        float x = GetRandomValue(xMin - 10, xMin + 10);
-        float y = GetRandomValue(yMin - 10, yMin + 10);
-        p.AddParticles(new Particle(x, y, 4, 4, tex, 0.1f));
+
+        for (int i = 0; i < 15; i++){
+            float x = GetRandomValue(xMin - 10, xMin + 10);
+            float y = GetRandomValue(yMin - 10, yMin + 10);
+            p.AddParticles(new Particle(x, y, 4, 4, tex, 0.1f));
+        }
+        
         engineParticleTimer = 0.0f;
     }
 }
@@ -55,9 +59,6 @@ void Player::Shoot(std::vector<Bullet>& bullets, Texture2D* tex){
 }
 
 void Player::Update(float& dt){
-
-    rect.x += xVel * dt;
-    rect.y += yVel * dt;
 
     if (!moving){
         if (abs(xVel) < drag * dt)
@@ -79,6 +80,31 @@ void Player::Update(float& dt){
                 yVel += drag * dt;
         }
     }
+
+    std::cout << xVel << std::endl;
+
+    if (abs(xVel) > maxSpeed){
+        if (xVel > 0){
+            //std::cout << maxSpeed * dt << std::endl;
+            xVel = maxSpeed;
+        }
+        else if (xVel < 0){
+            xVel = -maxSpeed;
+        }
+    }
+
+    if (abs(yVel) > maxSpeed){
+        if (yVel > 0){
+            //std::cout << maxSpeed * dt << std::endl;
+            yVel = maxSpeed;
+        }
+        else if (yVel < 0){
+            yVel = -maxSpeed;
+        }
+    }
+
+    rect.x += xVel * dt;
+    rect.y += yVel * dt;
 
     if (rect.x > glob::SCREEN_WIDTH)
         rect.x = -32;

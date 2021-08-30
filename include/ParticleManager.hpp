@@ -12,6 +12,7 @@ public:
     void RemoveParticle();
     void Draw();
     void Update(float& dt);
+    void Reset();
 private:
     std::vector<Particle*> particles;
 };
