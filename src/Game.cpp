@@ -180,8 +180,6 @@ void Game::MainGame(){
         }
         DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
 
-        
-
         DrawFPS(0, 0);
 
         EndDrawing();
@@ -205,6 +203,4 @@ void Game::StateSelect(){
             LoadingState();
             break;
     }
-
-    std::cout <<  state << std::endl;
 }
