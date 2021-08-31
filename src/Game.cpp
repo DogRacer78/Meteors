@@ -26,7 +26,7 @@ Game::Game(){
     burnerTex = LoadTexture("../res/Burner.png");
     asteroidTex = LoadTexture("../res/Asteroid.png");
 
-    player = new Player(100.0f, 100.0f, &playerTex, &burnerTex);
+    //player = new Player(100.0f, 100.0f, &playerTex, &burnerTex);
 
     pManager = new ParticleManager();
     
@@ -37,7 +37,7 @@ Game::Game(){
 
 void Game::StartScreen() {
     if (IsMouseButtonPressed(0) || IsKeyPressed(KEY_SPACE)){
-        state = main_game;
+        state = load_new;
     }
 
         BeginDrawing();
@@ -80,11 +80,30 @@ void Game::LoadNew(){
 
     std::cout << "Setting up new" << std::endl;
 
-    state = main_game;
+    state = loading_screen;
 }
 
 void Game::LoadingState(){ 
-    
+    dt = GetFrameTime();
+
+    loadInTimer += dt;
+
+    if (loadInTimer > loadInTime){
+        state = main_game;
+        loadInTimer = 0.0f;
+    }
+
+    BeginDrawing();
+
+    ClearBackground(BLACK);
+
+    player->Draw();
+
+    asteroidManager->Draw();
+
+    DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
+
+    EndDrawing();
 }
 
 void Game::MainGame(){
@@ -118,6 +137,9 @@ void Game::MainGame(){
 
         if (player->dead){
             state = death;
+            if (player->lives > 0){
+                player->lives -= 1;
+            }
             return;
         }
 
@@ -153,7 +175,12 @@ void Game::MainGame(){
 
         asteroidManager->Draw();
 
+        for (int i = 0; i < player->lives; i++){
+            DrawTextureEx(playerTex, Vector2{(float)livesDrawLocation + i * 23, 20}, 0.0f, 0.25f, RAYWHITE); 
+        }
         DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
+
+        
 
         DrawFPS(0, 0);
 
@@ -173,6 +200,9 @@ void Game::StateSelect(){
             break;
         case load_new:
             LoadNew();
+            break;
+        case loading_screen:
+            LoadingState();
             break;
     }
 

@@ -16,6 +16,7 @@ Player::Player(float x, float y, Texture2D* tex, Texture2D* _burnerTex){
     rect.height = 32;
     texture = tex;
     burnerTex = _burnerTex;
+    lives = 3;
 }
 
 void Player::Draw(){

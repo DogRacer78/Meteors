@@ -17,7 +17,7 @@
 
 class Game{
 public:
-    enum GameState : unsigned char { main_game, start, death, load_new };
+    enum GameState : unsigned char { main_game, start, death, load_new, loading_screen };
     Game();
     void MainGame();
     void StartScreen();
@@ -41,4 +41,7 @@ private:
     float dt;
 
     int level = 0;
+    float loadInTimer = 0.0f;
+    int loadInTime = 3;
+    int livesDrawLocation = 500;
 };
