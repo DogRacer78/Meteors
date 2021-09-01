@@ -120,6 +120,10 @@ void Player::Update(float& dt){
     //std::cout << rect.x << std::endl;
 }
 
+void Player::UnDead(){ 
+    dead = false;
+}
+
 //getters and setters
 void Player::SetMoving(bool move) { moving = move; }
 Vector2 Player::GetVel() { return Vector2{xVel, yVel}; };

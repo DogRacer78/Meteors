@@ -22,6 +22,7 @@ public:
     Rectangle rect;
     bool dead = false;
     void Reset();
+    void UnDead();
     int lives;
 private:
     Texture2D* texture;

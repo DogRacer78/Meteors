@@ -32,6 +32,8 @@ Game::Game(){
     
     asteroidManager = new AsteroidManager(level + 4, &asteroidTex);
 
+    playerLives = 3;
+
     dt = GetFrameTime();
 }
 
@@ -49,7 +51,7 @@ void Game::StartScreen() {
         EndDrawing();
 }
 
-void Game::DeathScreen() {
+void Game::GameOverScreen() {
 
     level = 0;
 
@@ -137,8 +139,12 @@ void Game::MainGame(){
 
         if (player->dead){
             state = death;
-            if (player->lives > 0){
-                player->lives -= 1;
+            if (playerLives > 0){
+                playerLives -= 1;
+                player->UnDead();
+            }
+            else if (playerLives == 0){
+                
             }
             return;
         }
@@ -194,7 +200,7 @@ void Game::StateSelect(){
             StartScreen();
             break;
         case death:
-            DeathScreen();
+            GameOverScreen();
             break;
         case load_new:
             LoadNew();

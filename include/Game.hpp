@@ -22,7 +22,7 @@ public:
     void MainGame();
     void StartScreen();
     void StateSelect();
-    void DeathScreen();
+    void GameOverScreen();
     void LoadNew();
     void LoadingState();
 private:
@@ -44,4 +44,5 @@ private:
     float loadInTimer = 0.0f;
     int loadInTime = 3;
     int livesDrawLocation = 500;
+    int playerLives;
 };
