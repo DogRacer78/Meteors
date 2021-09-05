@@ -25,12 +25,14 @@ Game::Game(){
     engineParticle = LoadTexture("../res/Particle.png");
     burnerTex = LoadTexture("../res/Burner.png");
     asteroidTex = LoadTexture("../res/Asteroid.png");
+    deathParticle = LoadTexture("../res/Death Particle.png");
+    shootParticle = LoadTexture("../res/Shoot Particle.png");
 
-    //player = new Player(100.0f, 100.0f, &playerTex, &burnerTex);
+    player = new Player(glob::SCREEN_WIDTH / 2 - 16, glob::SCREEN_HEIGHT / 2 - 16, &playerTex, &burnerTex);
 
     pManager = new ParticleManager();
     
-    asteroidManager = new AsteroidManager(level + 4, &asteroidTex);
+    asteroidManager = new AsteroidManager(level + 4, &asteroidTex, &deathParticle);
 
     playerLives = 3;
 
@@ -39,7 +41,7 @@ Game::Game(){
 
 void Game::StartScreen() {
     if (IsMouseButtonPressed(0) || IsKeyPressed(KEY_SPACE)){
-        state = load_new;
+        state = loading_screen;
     }
 
         BeginDrawing();
@@ -76,16 +78,19 @@ void Game::LoadNew(){
     pManager->Reset();
 
     delete player;
-    player = new Player(100.0f, 100.0f, &playerTex, &burnerTex);
+    player = new Player(glob::SCREEN_WIDTH / 2 - 16, glob::SCREEN_HEIGHT / 2 - 16, &playerTex, &burnerTex);
 
     asteroidManager->SetupNewLevel(level + 4);
 
     std::cout << "Setting up new" << std::endl;
 
+    if (playerLives != 3)
+        playerLives++;
+
     state = loading_screen;
 }
 
-void Game::LoadingState(){ 
+void Game::LoadingState(){
     dt = GetFrameTime();
 
     loadInTimer += dt;
@@ -108,6 +113,55 @@ void Game::LoadingState(){
     EndDrawing();
 }
 
+void Game::InBetweenLivesState(){
+    dt = GetFrameTime();
+
+    inBetweenLivesTimer += dt;
+
+    if (inBetweenLivesTimer > inBetweenLivesTime){
+        state = main_game;
+        inBetweenLivesTimer = 0.0f;
+        return;
+    }
+
+
+    for (uint32_t i = 0; i < bullets.size(); i++){
+        if (!bullets[i].GetDead()){
+            bullets[i].Update(dt);
+        }
+        else{
+            bullets.erase(bullets.begin() + i);
+            i--;
+        }
+    }
+
+    pManager->Update(dt);
+
+    asteroidManager->Update(dt);
+
+
+    BeginDrawing();
+
+    ClearBackground(BLACK);
+
+    for (Bullet& b : bullets)
+        b.Draw();
+    
+    pManager->Draw();
+
+    asteroidManager->Draw();
+
+    for (int i = 0; i < playerLives; i++){
+        DrawTextureEx(playerTex, Vector2{(float)livesDrawLocation + i * 23, 20}, 0.0f, 0.25f, RAYWHITE); 
+    }
+
+    DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
+
+    DrawFPS(0, 0);
+
+    EndDrawing();
+}
+
 void Game::MainGame(){
         dt = GetFrameTime();
 
@@ -123,7 +177,7 @@ void Game::MainGame(){
         if (IsKeyDown(KEY_LEFT))
             player->Rotate(-1, dt);
         if (IsKeyPressed(KEY_SPACE))
-            player->Shoot(bullets, &laserTex);
+            player->Shoot(bullets, &laserTex, *pManager, &shootParticle);
 
         // particle demonstration
         // if (IsMouseButtonDown(0)){
@@ -138,13 +192,14 @@ void Game::MainGame(){
         player->Update(dt);
 
         if (player->dead){
-            state = death;
             if (playerLives > 0){
                 playerLives -= 1;
                 player->UnDead();
+                bullets.clear();
+                state = inbetween_lives;
             }
             else if (playerLives == 0){
-                
+                state = death;
             }
             return;
         }
@@ -161,7 +216,7 @@ void Game::MainGame(){
 
         pManager->Update(dt);
 
-        asteroidManager->Update(dt, bullets, *player, score);
+        asteroidManager->Update(dt, bullets, *player, score, *pManager);
 
         if (asteroidManager->CheckClear()){
             level++;
@@ -181,7 +236,7 @@ void Game::MainGame(){
 
         asteroidManager->Draw();
 
-        for (int i = 0; i < player->lives; i++){
+        for (int i = 0; i < playerLives; i++){
             DrawTextureEx(playerTex, Vector2{(float)livesDrawLocation + i * 23, 20}, 0.0f, 0.25f, RAYWHITE); 
         }
         DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
@@ -207,6 +262,9 @@ void Game::StateSelect(){
             break;
         case loading_screen:
             LoadingState();
+            break;
+        case inbetween_lives:
+            InBetweenLivesState();
             break;
     }
 }

@@ -17,6 +17,8 @@ void Particle::Draw(){
 
 void Particle::Update(float& dt){
     UpdateLifeTimer(dt);
+    rect.x += xVel * dt;
+    rect.y += yVel * dt;
 }
 
 void Particle::UpdateLifeTimer(float& dt){
@@ -24,6 +26,11 @@ void Particle::UpdateLifeTimer(float& dt){
 
     if (lifetimeTimer > lifetime)
         dead = true;
+}
+
+void Particle::SetVelocity(float x, float y){
+    xVel = x;
+    yVel = y;
 }
 
 //getters and setters

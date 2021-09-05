@@ -17,7 +17,7 @@
 
 class Game{
 public:
-    enum GameState : unsigned char { main_game, start, death, load_new, loading_screen };
+    enum GameState : unsigned char { main_game, start, death, load_new, loading_screen, inbetween_lives };
     Game();
     void MainGame();
     void StartScreen();
@@ -25,6 +25,7 @@ public:
     void GameOverScreen();
     void LoadNew();
     void LoadingState();
+    void InBetweenLivesState();
 private:
     GameState state;
     Texture2D playerTex;
@@ -32,6 +33,8 @@ private:
     Texture2D engineParticle;
     Texture2D burnerTex;
     Texture2D asteroidTex;
+    Texture2D deathParticle;
+    Texture2D shootParticle;
 
     Player* player;
     ParticleManager* pManager;
@@ -45,4 +48,7 @@ private:
     int loadInTime = 3;
     int livesDrawLocation = 500;
     int playerLives;
+
+    float inBetweenLivesTimer = 0.0;
+    int inBetweenLivesTime = 3;
 };

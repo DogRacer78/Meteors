@@ -6,8 +6,9 @@
 #include "Asteroid.hpp"
 #include "Globals.hpp"
 
-AsteroidManager::AsteroidManager(int _num, Texture2D* asteroidTex){
+AsteroidManager::AsteroidManager(int _num, Texture2D* asteroidTex, Texture2D* _destroyTex){
     asteroidTexture = asteroidTex;
+    destroyTexture = _destroyTex;
 
     SetupNewLevel(_num);
 }
@@ -22,7 +23,7 @@ void AsteroidManager::Add(const Asteroid& asteroid){
     asteroids.push_back(asteroid);
 }
 
-void AsteroidManager::Update(float& dt, std::vector<Bullet>& b, Player& p, int& score){
+void AsteroidManager::Update(float& dt, std::vector<Bullet>& b, Player& p, int& score, ParticleManager& part){
     for (int i = 0; i < asteroids.size(); i++){
         if (!asteroids[i].GetDead())
             asteroids[i].Update(dt);
@@ -46,7 +47,7 @@ void AsteroidManager::Update(float& dt, std::vector<Bullet>& b, Player& p, int& 
         }
     }
 
-    CheckCollideWithBulletOrPlayer(b, p);
+    CheckCollideWithBulletOrPlayer(b, p, part);
 }
 
 void AsteroidManager::SetupNewLevel(int _num){
@@ -66,7 +67,7 @@ void AsteroidManager::SetupNewLevel(int _num){
     }
 }
 
-void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullets, Player& player){
+void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullets, Player& player, ParticleManager& p){
     for (Asteroid& a : asteroids){
         for (Bullet& b : bullets){
             if (CheckCollisionRecs(a.rect, b.rect)){
@@ -75,6 +76,11 @@ void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullet
                 else{
                     b.SetDead(true);
                     a.SetDead(true);
+                    for (int i = 0; i < 10; i++){
+                        Particle* particle = new Particle(a.rect.x, a.rect.y, 4.0f, 4.0f, destroyTexture, 5.0f);
+                        particle->SetVelocity(GetRandomValue(-100, 100), GetRandomValue(-100, 100));
+                        p.AddParticles(particle);
+                    }
                 }
             }
         }
@@ -83,6 +89,8 @@ void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullet
             if (CheckCollisionRecs(player.rect, a.rect)){
                 std::cout << "dead" << std::endl;
                 player.dead = true;
+                a.SetDead(true);
+                break;
             }
         }
     }
@@ -97,4 +105,10 @@ bool AsteroidManager::CheckClear(){
         return true;
     else
         return false;
+}
+
+void AsteroidManager::Update(float& dt){
+    for (Asteroid& a : asteroids){
+        a.Update(dt);
+    }
 }

@@ -16,7 +16,7 @@ public:
     void Rotate(char dir, float& dt);
     void AddThrust(float& dt, ParticleManager& p, Texture2D* tex);
     void Update(float& dt);
-    void Shoot(std::vector<Bullet>& bullets, Texture2D* tex);
+    void Shoot(std::vector<Bullet>& bullets, Texture2D* tex, ParticleManager& particleM, Texture2D* shootPa);
     void SetMoving(bool move);
     Vector2 GetVel();
     Rectangle rect;

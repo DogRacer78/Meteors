@@ -9,6 +9,8 @@ public:
     virtual void Update(float& dt);
     bool GetDead();
     Vector2 SetSinVelocity();
+    float xVel, yVel;
+    void SetVelocity(float x, float y);
 protected:
     Rectangle rect;
     Texture2D* texture;

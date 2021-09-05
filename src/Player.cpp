@@ -55,8 +55,13 @@ void Player::AddThrust(float& dt, ParticleManager& p, Texture2D* tex){
     }
 }
 
-void Player::Shoot(std::vector<Bullet>& bullets, Texture2D* tex){
+void Player::Shoot(std::vector<Bullet>& bullets, Texture2D* tex, ParticleManager& particleM, Texture2D* shootPa){
     bullets.push_back(Bullet(rect.x + 16, rect.y + 16, tex, rotation));
+    for (int i = 0; i < 10; i++){
+        Particle* particle = new Particle(rect.x, rect.y, 4.0f, 4.0f, shootPa, 5.0f);
+        particle->SetVelocity(GetRandomValue(-100, 100), GetRandomValue(-100, 100));
+        particleM.AddParticles(particle);
+    }
 }
 
 void Player::Update(float& dt){
@@ -122,6 +127,11 @@ void Player::Update(float& dt){
 
 void Player::UnDead(){ 
     dead = false;
+    rect.x = glob::SCREEN_WIDTH / 2 - 16;
+    rect.y = glob::SCREEN_HEIGHT / 2 - 16;
+    rotation = 0.0f;
+    xVel = 0.0f;
+    yVel = 0.0f;
 }
 
 //getters and setters
