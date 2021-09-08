@@ -11,7 +11,7 @@ class AsteroidManager{
 public:
     AsteroidManager(int _num, Texture2D* asteroidTex, Texture2D* _destroyTex);
     void Update(float& dt, std::vector<Bullet>& b, Player& p, int& score, ParticleManager& part);
-    void Update(float& dt);
+    void Update(float& dt, int& score);
     void Draw();
     void Add(const Asteroid& asteroid);
     void SetupNewLevel(int _num);

@@ -90,6 +90,16 @@ void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullet
                 std::cout << "dead" << std::endl;
                 player.dead = true;
                 a.SetDead(true);
+                for (int i = 0; i < 10; i++){
+                    Particle* particle = new Particle(player.rect.x, player.rect.y, 10.0f, 10.0f, destroyTexture, 2.8f);
+                    particle->SetVelocity(GetRandomValue(-100, 100), GetRandomValue(-100, 100));
+                    p.AddParticles(particle);
+                }
+                for (int i = 0; i < 10; i++){
+                    Particle* particle = new Particle(a.rect.x, a.rect.y, 4.0f, 4.0f, destroyTexture, 5.0f);
+                    particle->SetVelocity(GetRandomValue(-100, 100), GetRandomValue(-100, 100));
+                    p.AddParticles(particle);
+                    }
                 break;
             }
         }
@@ -107,8 +117,27 @@ bool AsteroidManager::CheckClear(){
         return false;
 }
 
-void AsteroidManager::Update(float& dt){
-    for (Asteroid& a : asteroids){
-        a.Update(dt);
+void AsteroidManager::Update(float& dt, int& score){
+    for (int i = 0; i < asteroids.size(); i++){
+        if (!asteroids[i].GetDead())
+            asteroids[i].Update(dt);
+        else{
+            if (asteroids[i].asteroidStage == 3){
+                Add(Asteroid(asteroids[i].rect.x, asteroids[i].rect.y, 32, 32, GetRandomValue(0, 360), 2, asteroidTexture));
+                Add(Asteroid(asteroids[i].rect.x, asteroids[i].rect.y, 32, 32, GetRandomValue(0, 360), 2, asteroidTexture));
+                score += 50;
+            }
+            else if (asteroids[i].asteroidStage == 2){
+                Add(Asteroid(asteroids[i].rect.x, asteroids[i].rect.y, 24, 24, GetRandomValue(0, 360), 1, asteroidTexture));
+                Add(Asteroid(asteroids[i].rect.x, asteroids[i].rect.y, 24, 24, GetRandomValue(0, 360), 1, asteroidTexture));
+                score += 30;
+            }
+            else{
+                score += 100;
+            }
+
+            asteroids.erase(asteroids.begin() + i);
+            i--;
+        }
     }
 }

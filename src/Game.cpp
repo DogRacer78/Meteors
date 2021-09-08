@@ -56,6 +56,7 @@ void Game::StartScreen() {
 void Game::GameOverScreen() {
 
     level = 0;
+    playerLives = 3;
 
     if (IsMouseButtonPressed(0) || IsKeyPressed(KEY_ENTER)){
         state = load_new;
@@ -137,7 +138,7 @@ void Game::InBetweenLivesState(){
 
     pManager->Update(dt);
 
-    asteroidManager->Update(dt);
+    asteroidManager->Update(dt, score);
 
 
     BeginDrawing();
