@@ -18,7 +18,6 @@ Game::Game(){
     state = start;
 
     InitWindow(glob::SCREEN_WIDTH, glob::SCREEN_HEIGHT, "Asteroids");
-    SetTargetFPS(144);
 
     playerTex = LoadTexture("../res/PlayerTex.png");
     laserTex = LoadTexture("../res/Laser.png");

@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:/raylib/raylib/src/",
-                "include"
+                "include",
+                "C:/emsdk/upstream/emscripten/system/include"
             ],
             "defines": [
                 "_DEBUG",

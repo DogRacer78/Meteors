@@ -29,7 +29,7 @@ private:
     Texture2D* burnerTex;
     float xVel = 0.0f, yVel = 0.0f;
     float rotation;
-    float drag = 150.0f;
+    float drag = 100.0f;
     float speed = 350.0f;
     bool moving = false;
     Vector2 thrustLocation = {0.0f, 0.0f};

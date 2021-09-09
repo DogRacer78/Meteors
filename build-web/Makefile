@@ -24,7 +24,7 @@
 .PHONY: all clean
 
 # Define required variables
-PROJECT_NAME       ?= index
+PROJECT_NAME       ?= my_game
 RAYLIB_VERSION     ?= 3.8.0
 RAYLIB_PATH        ?= C:/raylib/raylib
 
@@ -249,7 +249,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     # --memory-init-file 0       # to avoid an external memory initialization code file (.mem)
     # --preload-file resources   # specify a resources folder for data compilation
     # --source-map-base          # allow debugging in browser with source map
-    CFLAGS += -s USE_GLFW=3 -s TOTAL_MEMORY=67108864 -s FORCE_FILESYSTEM=1 --preload-file ../res -s ASYNCIFY 
+    CFLAGS += -s USE_GLFW=3 -s TOTAL_MEMORY=67108864 -s FORCE_FILESYSTEM=1 --preload-file ../res
 
     # Define a custom shell .html and output extension
     CFLAGS += --shell-file $(RAYLIB_PATH)/src/shell.html
@@ -258,7 +258,7 @@ endif
 
 # Define include paths for required headers
 # NOTE: Several external required libraries (stb and others)
-INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external -IC:/Users/doggi/Documents/CPP-Stuff/Asteroids/include
+INCLUDE_PATHS = -I. -I$(RAYLIB_PATH)/src -I$(RAYLIB_PATH)/src/external -IC:/Users/doggi/Documents/CPP-Stuff/Asteroids/include -IC:/emsdk/upstream/emscripten/system/include
 
 # Define additional directories containing required header files
 ifeq ($(PLATFORM),PLATFORM_RPI)
