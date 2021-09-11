@@ -5,10 +5,12 @@
 #include "AsteroidManager.hpp"
 #include "Asteroid.hpp"
 #include "Globals.hpp"
+#include "Game.hpp"
 
-AsteroidManager::AsteroidManager(int _num, Texture2D* asteroidTex, Texture2D* _destroyTex){
+AsteroidManager::AsteroidManager(int _num, Texture2D* asteroidTex, Texture2D* _destroyTex, Game* _game){
     asteroidTexture = asteroidTex;
     destroyTexture = _destroyTex;
+    game = _game;
 
     SetupNewLevel(_num);
 }
@@ -60,8 +62,20 @@ void AsteroidManager::SetupNewLevel(int _num){
     asteroids.clear();
 
     for (int i = 0; i < _num; i++){
-        x = GetRandomValue(0, glob::SCREEN_WIDTH);
-        y = GetRandomValue(0, glob::SCREEN_HEIGHT);
+        if (GetRandomValue(0, -1) == -1){
+            x = GetRandomValue(0, 100);
+        }
+        else{
+            x = GetRandomValue(glob::SCREEN_WIDTH - 100, glob::SCREEN_WIDTH);
+        }
+
+        if (GetRandomValue(0, -1) == -1){
+            y = GetRandomValue(0, 100);
+        }
+        else{
+            y = GetRandomValue(glob::SCREEN_HEIGHT - 100, glob::SCREEN_HEIGHT);
+        }
+
         randRots = GetRandomValue(0, 360);
         Add(Asteroid(x, y, 64, 64, randRots, 3, asteroidTexture));
     }
@@ -81,6 +95,7 @@ void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullet
                         particle->SetVelocity(GetRandomValue(-100, 100), GetRandomValue(-100, 100));
                         p.AddParticles(particle);
                     }
+                    PlaySoundMulti(game->explosionFx);
                 }
             }
         }
@@ -100,6 +115,7 @@ void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullet
                     particle->SetVelocity(GetRandomValue(-100, 100), GetRandomValue(-100, 100));
                     p.AddParticles(particle);
                     }
+                PlaySoundMulti(game->explosionFx);
                 break;
             }
         }

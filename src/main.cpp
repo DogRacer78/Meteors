@@ -2,7 +2,7 @@
 
 #include "Game.hpp"
 
-//#define web
+#define web
 
 #if defined(web)
     #include <emscripten/emscripten.h>

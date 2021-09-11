@@ -13,11 +13,13 @@
 #include "Asteroid.hpp"
 #include "AsteroidManager.hpp"
 #include "Game.hpp"
+#include "BGParticle.hpp"
 
 Game::Game(){
     state = start;
 
     InitWindow(glob::SCREEN_WIDTH, glob::SCREEN_HEIGHT, "Asteroids");
+    InitAudioDevice();
 
     playerTex = LoadTexture("../res/PlayerTex.png");
     laserTex = LoadTexture("../res/Laser.png");
@@ -26,12 +28,24 @@ Game::Game(){
     asteroidTex = LoadTexture("../res/Asteroid.png");
     deathParticle = LoadTexture("../res/Death Particle.png");
     shootParticle = LoadTexture("../res/Shoot Particle.png");
+    spaceParticle = LoadTexture("../res/Space Particle.png");
+
+    //load in sounds
+    explosionFx = LoadSound("../res/Explosion.wav");
+    shootFx = LoadSound("../res/Shoot.wav");
+    engineFx = LoadSound("../res/Engine.wav");
 
     player = new Player(glob::SCREEN_WIDTH / 2 - 16, glob::SCREEN_HEIGHT / 2 - 16, &playerTex, &burnerTex);
 
     pManager = new ParticleManager();
     
-    asteroidManager = new AsteroidManager(level + 4, &asteroidTex, &deathParticle);
+    asteroidManager = new AsteroidManager(level + 4, &asteroidTex, &deathParticle, this);
+
+    for (int i = 0; i < 100; i++){
+        BGParticle* particle = new BGParticle(GetRandomValue(0, glob::SCREEN_WIDTH), GetRandomValue(0, glob::SCREEN_HEIGHT), 2.0f, 2.0f, &spaceParticle, 0.0f);
+        particle->SetVelocity(GetRandomValue(-50, 50), GetRandomValue(-50, 50));
+        pManager->AddParticles(particle);
+    }
 
     playerLives = 3;
 
@@ -43,11 +57,17 @@ void Game::StartScreen() {
         state = loading_screen;
     }
 
+    if (IsKeyPressed(KEY_ENTER)){
+        state = controls;
+    }
+
         BeginDrawing();
 
         ClearBackground(BLACK);
 
         DrawText("Meteors", 133, 163, 96, WHITE);
+        DrawText("Space to start", 133, 400, 20, WHITE);
+        DrawText("Enter to see controls", 133, 450, 20, WHITE);
 
         EndDrawing();
 }
@@ -57,7 +77,7 @@ void Game::GameOverScreen() {
     level = 0;
     playerLives = 3;
 
-    if (IsMouseButtonPressed(0) || IsKeyPressed(KEY_ENTER)){
+    if (IsMouseButtonPressed(0) || IsKeyPressed(KEY_SPACE)){
         state = load_new;
         score = 0;
     }
@@ -68,6 +88,7 @@ void Game::GameOverScreen() {
     // 292, 368
     DrawText("Game Over", 133, 163, 96, WHITE);
     DrawText(("Score: " + std::to_string(score)).c_str(), 292, 368, 18, WHITE);
+    DrawText("Space to play again", 133, 400, 20, WHITE);
 
     EndDrawing();
 }
@@ -86,6 +107,12 @@ void Game::LoadNew(){
 
     if (playerLives != 3)
         playerLives++;
+    
+    for (int i = 0; i < 100; i++){
+        BGParticle* particle = new BGParticle(GetRandomValue(0, glob::SCREEN_WIDTH), GetRandomValue(0, glob::SCREEN_HEIGHT), 2.0f, 2.0f, &spaceParticle, 0.0f);
+        particle->SetVelocity(GetRandomValue(-50, 50), GetRandomValue(-50, 50));
+        pManager->AddParticles(particle);
+    }
 
     state = loading_screen;
 }
@@ -100,6 +127,8 @@ void Game::LoadingState(){
         loadInTimer = 0.0f;
     }
 
+    pManager->Update(dt);
+
     BeginDrawing();
 
     ClearBackground(BLACK);
@@ -107,6 +136,8 @@ void Game::LoadingState(){
     player->Draw();
 
     asteroidManager->Draw();
+
+    pManager->Draw();
 
     DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
 
@@ -162,22 +193,46 @@ void Game::InBetweenLivesState(){
     EndDrawing();
 }
 
+void Game::ControlsScreen(){
+
+    if (IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(0))
+        state = start;
+
+    BeginDrawing();
+
+    ClearBackground(BLACK);
+
+    //264 67
+    DrawText("Controls", 264, 67, 36, WHITE);
+    DrawText("Arrow keys to move and space to shoot", 158, 201, 18, WHITE);
+    DrawText("Press space to return", 241, 287, 18, WHITE);
+
+    EndDrawing();
+}
+
 void Game::MainGame(){
         dt = GetFrameTime();
 
 
-        if (IsKeyDown(KEY_UP)){
+        if (IsKeyDown(KEY_UP) || IsGamepadButtonDown(0, 7)){
             player->AddThrust(dt, *pManager, &engineParticle);
             player->SetMoving(true);
+            if (!IsSoundPlaying(engineFx))
+                PlaySound(engineFx);
         }
-        else if (!IsKeyDown(KEY_UP))
+        else if (!IsKeyDown(KEY_UP)){
             player->SetMoving(false);
-        if (IsKeyDown(KEY_RIGHT))
+            StopSound(engineFx);
+        }
+        if (IsKeyDown(KEY_RIGHT) || GetGamepadAxisMovement(0, 0) > 0)
             player->Rotate(1, dt);
-        if (IsKeyDown(KEY_LEFT))
+        if (IsKeyDown(KEY_LEFT) || GetGamepadAxisMovement(0, 0) < 0)
             player->Rotate(-1, dt);
-        if (IsKeyPressed(KEY_SPACE))
+        if (IsKeyPressed(KEY_SPACE) || IsGamepadButtonPressed(0, 8)){
             player->Shoot(bullets, &laserTex, *pManager, &shootParticle);
+            PlaySoundMulti(shootFx);
+        }
+            
 
         // particle demonstration
         // if (IsMouseButtonDown(0)){
@@ -265,6 +320,9 @@ void Game::StateSelect(){
             break;
         case inbetween_lives:
             InBetweenLivesState();
+            break;
+        case controls:
+            ControlsScreen();
             break;
     }
 }

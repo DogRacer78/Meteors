@@ -13,7 +13,7 @@ public:
 private:
     Texture2D* texture;
     float xVel = 0.0f, yVel = 0.0f;
-    float travelTime = 2.0f;
+    float travelTime = 1.0f;
     float travelTimer = 0.0f;
     float rotation;
     bool dead = false;

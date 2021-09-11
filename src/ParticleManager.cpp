@@ -26,6 +26,9 @@ void ParticleManager::Update(float& dt){
     }
 }
 
-void ParticleManager::Reset(){ 
+void ParticleManager::Reset(){
+    for (int i = 0; i < particles.size(); i++){
+        delete particles[i];
+    }
     particles.clear();
 }

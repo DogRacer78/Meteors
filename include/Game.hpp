@@ -15,9 +15,11 @@
 #include "Asteroid.hpp"
 #include "AsteroidManager.hpp"
 
+class AsteroidManager;
+
 class Game{
 public:
-    enum GameState : unsigned char { main_game, start, death, load_new, loading_screen, inbetween_lives };
+    enum GameState : unsigned char { main_game, start, death, load_new, loading_screen, inbetween_lives, controls };
     Game();
     void MainGame();
     void StartScreen();
@@ -26,8 +28,12 @@ public:
     void LoadNew();
     void LoadingState();
     void InBetweenLivesState();
+    void ControlsScreen();
+    Sound explosionFx;
 private:
     GameState state;
+    
+    //Textures
     Texture2D playerTex;
     Texture2D laserTex;
     Texture2D engineParticle;
@@ -35,6 +41,11 @@ private:
     Texture2D asteroidTex;
     Texture2D deathParticle;
     Texture2D shootParticle;
+    Texture2D spaceParticle;
+
+    //sounds
+    Sound shootFx;
+    Sound engineFx;
 
     Player* player;
     ParticleManager* pManager;

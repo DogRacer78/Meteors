@@ -381,7 +381,8 @@ PROJECT_SOURCE_FILES ?= \
     ../src/Particle.cpp \
     ../src/ParticleManager.cpp \
     ../src/Player.cpp \
-    ../src/SinParticle.cpp
+    ../src/SinParticle.cpp \
+    ../src/BGParticle.cpp
 
 # Define all object files from source files
 OBJS = $(patsubst %.cpp, %.o, $(PROJECT_SOURCE_FILES))
