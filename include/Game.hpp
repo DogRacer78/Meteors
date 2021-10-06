@@ -29,6 +29,7 @@ public:
     void LoadingState();
     void InBetweenLivesState();
     void ControlsScreen();
+    void SetScreenShake(int s);
     Sound explosionFx;
 private:
     GameState state;
@@ -62,4 +63,6 @@ private:
 
     float inBetweenLivesTimer = 0.0;
     int inBetweenLivesTime = 3;
+
+    int screenShake = 0;
 };

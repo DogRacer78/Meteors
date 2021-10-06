@@ -28,7 +28,7 @@ Asteroid::Asteroid(float x, float y, float w, float h, float rot, int astStage, 
 }
 
 void Asteroid::Draw(){
-    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, Rectangle{rect.x + rect.width / 2, rect.y + rect.height / 2, rect.width, rect.height},
+    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, Rectangle{rect.x + rect.width / 2 - glob::offset[0], rect.y + rect.height / 2 - glob::offset[1], rect.width, rect.height},
     Vector2{rect.width / 2, rect.height / 2}, rotation, RAYWHITE);
     //DrawRectangle(rect.x, rect.y, rect.width, rect.height, RED);
 }

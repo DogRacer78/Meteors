@@ -21,11 +21,11 @@ Player::Player(float x, float y, Texture2D* tex, Texture2D* _burnerTex){
 
 void Player::Draw(){
     //DrawTextureEx(*texture, Vector2 { rect.x, rect.y }, 0.0f, 1.0f, RAYWHITE);
-    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, Rectangle{rect.x + 16, rect.y + 16, rect.width, rect.height}, Vector2{16.0f, 16.0f}, rotation, RAYWHITE);
+    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, Rectangle{rect.x + 16 - glob::offset[0], rect.y + 16 - glob::offset[1], rect.width, rect.height}, Vector2{16.0f, 16.0f}, rotation, RAYWHITE);
     //DrawRectangle(rect.x, rect.y, rect.width, rect.height, RED);
 
     if (moving)
-        DrawTexturePro(*burnerTex, Rectangle{0, 0, (float)burnerTex->width, (float)burnerTex->height}, Rectangle{thrustLocation.x + 16, thrustLocation.y + 16, 32, 32}, Vector2{16, -16}, rotation, RAYWHITE);
+        DrawTexturePro(*burnerTex, Rectangle{0, 0, (float)burnerTex->width, (float)burnerTex->height}, Rectangle{thrustLocation.x + 16 - glob::offset[0], thrustLocation.y + 16 - glob::offset[1], 32, 32}, Vector2{16, -16}, rotation, RAYWHITE);
 }
 
 void Player::Rotate(char dir, float& dt){

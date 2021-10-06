@@ -188,7 +188,7 @@ void Game::InBetweenLivesState(){
 
     DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
 
-    DrawFPS(0, 0);
+    //DrawFPS(0, 0);
 
     EndDrawing();
 }
@@ -213,6 +213,8 @@ void Game::ControlsScreen(){
 void Game::MainGame(){
         dt = GetFrameTime();
 
+        int gesture = GetGestureDetected();
+
 
         if (IsKeyDown(KEY_UP) || IsGamepadButtonDown(0, 7)){
             player->AddThrust(dt, *pManager, &engineParticle);
@@ -232,17 +234,18 @@ void Game::MainGame(){
             player->Shoot(bullets, &laserTex, *pManager, &shootParticle);
             PlaySoundMulti(shootFx);
         }
-            
-
-        // particle demonstration
-        // if (IsMouseButtonDown(0)){
-        //     Vector2 pos = GetMousePosition();
-        //     //pos.x += GetRandomValue(-20, 20);
-        //     //pos.y += GetRandomValue(-20, 20);
-        //     pManager.AddParticles(new SinParticle(pos.x, pos.y, 4.0f, 4.0f, &engineParticle, 10.0f, 45));
-        // }
 
         // update
+
+        glob::offset[0] = 0.0f;
+        glob::offset[1] = 0.0f;
+
+        if (screenShake > 0){
+            screenShake -= 1;
+            glob::offset[0] = GetRandomValue(-4, 4);
+            glob::offset[1] = GetRandomValue(-4, 4);
+        }
+            
 
         player->Update(dt);
 
@@ -296,7 +299,7 @@ void Game::MainGame(){
         }
         DrawText(("Score: " + std::to_string(score)).c_str(), 26, 45, 20, WHITE);
 
-        DrawFPS(0, 0);
+        //DrawFPS(0, 0);
 
         EndDrawing();
 }
@@ -326,3 +329,5 @@ void Game::StateSelect(){
             break;
     }
 }
+
+void Game::SetScreenShake(int s) { screenShake = s; }

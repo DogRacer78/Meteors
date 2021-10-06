@@ -5,6 +5,8 @@
 #include "Particle.hpp"
 #include "Player.hpp"
 
+// not currently used - might use in the future
+
 class SinParticle : public Particle{
 public:
     SinParticle(float x, float y, float w, float h, Texture2D* tex, float _lifetime, float _dir);

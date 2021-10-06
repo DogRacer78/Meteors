@@ -17,7 +17,7 @@ Bullet::Bullet(float x, float y, Texture2D* tex, float rots){
 }
 
 void Bullet::Draw(){
-    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, rect, Vector2{8, 8}, rotation, RAYWHITE);
+    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, Rectangle{rect.x - glob::offset[0], rect.y - glob::offset[1], rect.width, rect.height}, Vector2{8, 8}, rotation, RAYWHITE);
 }
 
 void Bullet::Update(float& dt){

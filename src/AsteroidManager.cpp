@@ -96,6 +96,7 @@ void AsteroidManager::CheckCollideWithBulletOrPlayer(std::vector<Bullet>& bullet
                         p.AddParticles(particle);
                     }
                     PlaySoundMulti(game->explosionFx);
+                    game->SetScreenShake(30);
                 }
             }
         }

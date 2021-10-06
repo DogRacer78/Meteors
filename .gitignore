@@ -1,4 +1,9 @@
 /Release
-Release.zip
+*.zip
 *.o
 *.zip
+build-web/Meteors
+build-web/server.py
+.vscode
+*.exe
+Meteors/

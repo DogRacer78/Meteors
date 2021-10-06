@@ -1,6 +1,7 @@
 #include <raylib.h>
 
 #include "Particle.hpp"
+#include "Globals.hpp"
 
 Particle::Particle(float x, float y, float w, float h, Texture2D* tex, float _lifetime){
     rect.x = x;
@@ -12,7 +13,7 @@ Particle::Particle(float x, float y, float w, float h, Texture2D* tex, float _li
 }
 
 void Particle::Draw(){
-    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, rect, Vector2{0.0f, 0.0f}, 0.0f, RAYWHITE);
+    DrawTexturePro(*texture, Rectangle{0, 0, (float)texture->width, (float)texture->height}, Rectangle{rect.x - glob::offset[0], rect.y - glob::offset[1], rect.width, rect.height}, Vector2{0.0f, 0.0f}, 0.0f, RAYWHITE);
 }
 
 void Particle::Update(float& dt){

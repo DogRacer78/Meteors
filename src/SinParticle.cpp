@@ -6,6 +6,8 @@
 #include "SinParticle.hpp"
 #include "Player.hpp"
 
+// not currently used - might use in the future
+
 SinParticle::SinParticle(float x, float y, float w, float h, Texture2D* tex, float _lifetime, float _dir) : Particle(x, y, w, h, tex, _lifetime){
     dir = _dir + 90.0f;
 }

@@ -20,6 +20,6 @@ void BGParticle::Update(float& dt){
     if (rect.y < -rect.height)
         rect.y = glob::SCREEN_HEIGHT;
     else if (rect.y > glob::SCREEN_HEIGHT)
-        rect.y = glob::SCREEN_HEIGHT;
+        rect.y = -rect.height;
         
 }
